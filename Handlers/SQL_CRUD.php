@@ -2,7 +2,7 @@
 
 namespace Handlers;
 
-include(__DIR__ . "/./Connection.php");
+include_once(__DIR__ . "/./Connection.php");
 
 use Handlers\Connection;
 
