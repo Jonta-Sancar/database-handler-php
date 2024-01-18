@@ -1,8 +1,12 @@
 <?php
 
+namespace Handlers;
+
 include(__DIR__ . "/./Connection.php");
 
 use Handlers\Connection;
+
+use Exception;
 
 class SQL_CRUD extends Connection{
 
