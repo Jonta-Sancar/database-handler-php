@@ -150,11 +150,17 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_insert($table, $data);
   
       if($response !== false){
-        $this->executeSQL($response['SQL'], $response["VALUES"]);
+        $this->executeSQL($response['SQL'], ...$response["VALUES"]);
 
-        return $this->sql_exec_result;
+        return [
+          "SQL" => $response['SQL'],
+          "RESULT" => $this->sql_exec_result,
+        ];
       } else {
-        return false;
+        return [
+          "SQL" => $response['SQL'],
+          "RESULT" => false,
+        ];
       }
     } catch (Exception $e) {
       return [
@@ -171,9 +177,16 @@ class SQL_CRUD extends Connection{
       if($response !== false){
         $this->executeSQL($response);
 
-        return $this->sql_exec_result;
+        return [
+          "SQL" => $response,
+          "RESULT" => $this->sql_exec_result
+        ];
       } else {
-        return false;
+
+        return [
+          "SQL" => $response,
+          "RESULT" => false
+        ];
       }
     } catch (Exception $e) {
       return [
@@ -188,9 +201,17 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_update($table, $data, $conditions);
 
       if($response !== false){
-        $this->executeSQL($response['SQL'], $response['VALUES']);
+        $this->executeSQL($response['SQL'], ...$response['VALUES']);
 
-        return $this->sql_exec_result;
+        return [
+          "SQL" => $response['SQL'],
+          "RESULT" => $this->sql_exec_result
+        ];
+      } else {
+        return [
+          "SQL" => $response['SQL'],
+          "RESULT" => false
+        ];
       }
     } catch (Exception $e) {
       return [
@@ -205,9 +226,17 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_delete($table, $conditions);
 
       if($response !== false){
-        $this->executeSQL($response[''], $response['']);
+        $this->executeSQL($response);
 
-        return $this->sql_exec_result;
+        return [
+          "SQL" => $response,
+          "RESULT" => $this->sql_exec_result,
+        ];
+      } else {
+        return [
+          "SQL" => $response['SQL'],
+          "RESULT" => false,
+        ];
       }
     } catch (Exception $e) {
       return [
