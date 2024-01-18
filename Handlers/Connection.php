@@ -52,9 +52,9 @@ class Connection {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($values);
 
-        $sql_comand = explode(" ", $sql)[0];
+        $sql_comand = strtolower(explode(" ", $sql)[0]);
 
-        if($sql_comand == 'SELECT' || $sql_comand == 'select'){
+        if($sql_comand == 'select'){
           $this->sql_exec_result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
           $this->sql_exec_result = $stmt;
