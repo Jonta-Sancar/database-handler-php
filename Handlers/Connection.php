@@ -43,7 +43,7 @@ class Connection {
     $this->connection_error = null;
   }
 
-  public function executeSQL($sql, ...$values) {
+  protected function executeSQL($sql, ...$values) {
     $this->connect();
 
     if($this->connection){
