@@ -11,6 +11,7 @@ $crud = new SQL_CRUD("localhost", "root", "1234", "teste");
 
 
 echo "<h3>INSERT</h3>";
+
 // INSERT
   $data_insert = [
     "id" => 20,
@@ -25,6 +26,7 @@ echo "<h3>INSERT</h3>";
 
 echo "<br><br>";
 echo "<h3>SELECT</h3>";
+
 // SELECT 
   $response = $crud->execSelect("pessoas");
   var_dump($response);
