@@ -50,7 +50,13 @@ class Connection {
       try {
 
         $stmt = $this->connection->prepare($sql);
-        $stmt->execute($values);
+
+        $count = 1;
+        foreach($values as $value) {
+          $stmt->bindParam($count++,$value);
+        }
+        
+        $stmt->execute();
 
         $sql_comand = strtolower(explode(" ", $sql)[0]);
 
