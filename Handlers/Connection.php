@@ -52,8 +52,10 @@ class Connection {
         $stmt = $this->connection->prepare($sql);
 
         $count = 1;
-        foreach($values as $value) {
-          $stmt->bindParam($count++,$value);
+        foreach($values as $k => $v) {
+          $stmt->bindParam($count, $values[$k]);
+          
+          $count++;
         }
         
         $stmt->execute();
