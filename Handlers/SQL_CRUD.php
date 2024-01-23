@@ -91,7 +91,7 @@ class SQL_CRUD extends Connection{
     return $limit;
   }
   
-  private function SQL_insert(String $table, Array $data) : Array|Bool{
+  protected function SQL_insert(String $table, Array $data) : Array|Bool{
     if(is_array($data)){
       $processed_data = array_map(function($v){return $this->returnProcessedData($v);}, $data);
   
@@ -108,7 +108,7 @@ class SQL_CRUD extends Connection{
     }
   }
   
-  private function SQL_select(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = null, String|Int|Null $limit_max = null) : String|Bool{
+  protected function SQL_select(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = null, String|Int|Null $limit_max = null) : String|Bool{
     try{
       $columns_txt    = $this->checksIfIsArrayAndReturns($columns)  ?? '*';
       $conditions_txt = $this->prepareConditions($conditions);
@@ -130,7 +130,7 @@ class SQL_CRUD extends Connection{
     }    
   }
   
-  private function SQL_update(String $table, Array $data, Array|String|Null $conditions = null) : Array|Bool{
+  protected function SQL_update(String $table, Array $data, Array|String|Null $conditions = null) : Array|Bool{
     if(is_array($data) && $conditions && !empty($conditions)){
       $processed_data = array_map(function($v){return $this->returnProcessedData($v);}, $data);
       $conditions_txt = $this->prepareConditions($conditions);
@@ -153,7 +153,7 @@ class SQL_CRUD extends Connection{
     }
   }
   
-  private function SQL_delete(String $table, Array|String|Null $conditions = null) : String|Bool{
+  protected function SQL_delete(String $table, Array|String|Null $conditions = null) : String|Bool{
     $conditions_prepared = $this->prepareConditions($conditions);
   
     $conditions_txt = $this->checksIfIsNotEmptyAndReturns($conditions_prepared, " WHERE ");
