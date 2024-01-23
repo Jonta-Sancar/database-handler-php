@@ -7,9 +7,9 @@ use Exception;
 class ReturnFormat {
   public Object|Array|Bool|Null $result;
   public String|Null $result_error;
-  public String|Null $sql;
+  public String|Bool|Null $sql;
 
-  function __construct(Object|Array|Bool|Null $result, String|Null $result_error, String|Null $sql) {
+  function __construct(Object|Array|Bool|Null $result, String|Null $result_error, String|Bool|Null $sql) {
     $this->result = $result;
     $this->result_error = $result_error;
     $this->sql = $sql;
