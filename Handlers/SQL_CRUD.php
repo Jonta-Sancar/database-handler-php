@@ -2,8 +2,7 @@
 
 namespace Handlers;
 
-include_once(__DIR__ . "/./Connection.php");
-
+use Handlers\ReturnFormat;
 use Handlers\Connection;
 
 use Exception;
@@ -167,23 +166,12 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_insert($table, $data);
   
       if($response !== false){
-        $this->executeSQL($response['SQL'], ...$response["VALUES"]);
-
-        return [
-          "SQL" => $response['SQL'],
-          "RESULT" => $this->sql_exec_result,
-        ];
+        return $this->executeSQL($response['SQL'], ...$response["VALUES"]);
       } else {
-        return [
-          "SQL" => $response['SQL'],
-          "RESULT" => false,
-        ];
+        return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
       }
     } catch (Exception $e) {
-      return [
-        'query_status'=> false,
-        'message' => $e->getMessage()
-      ];
+      return new ReturnFormat(false, $e->getMessage(), false);
     }
   }
 
@@ -192,24 +180,12 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_select($table, $columns, $conditions, $group_by, $order_by, $order_direction, $limit_min, $limit_max);
 
       if($response !== false){
-        $this->executeSQL($response);
-
-        return [
-          "SQL" => $response,
-          "RESULT" => $this->sql_exec_result
-        ];
+        return $this->executeSQL($response);
       } else {
-
-        return [
-          "SQL" => $response,
-          "RESULT" => false
-        ];
+        return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
       }
     } catch (Exception $e) {
-      return [
-        'query_status'=> false,
-        'message' => $e->getMessage()
-      ];
+      return new ReturnFormat(false, $e->getMessage(), false);
     }
   }
 
@@ -218,23 +194,12 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_update($table, $data, $conditions);
 
       if($response !== false){
-        $this->executeSQL($response['SQL'], ...$response['VALUES']);
-
-        return [
-          "SQL" => $response['SQL'],
-          "RESULT" => $this->sql_exec_result
-        ];
+        return $this->executeSQL($response['SQL'], ...$response['VALUES']);
       } else {
-        return [
-          "SQL" => $response['SQL'],
-          "RESULT" => false
-        ];
+        return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
       }
     } catch (Exception $e) {
-      return [
-        'query_status'=> false,
-        'message' => $e->getMessage()
-      ];
+      return new ReturnFormat(false, $e->getMessage(), false);
     }
   }
 
@@ -243,23 +208,12 @@ class SQL_CRUD extends Connection{
       $response = $this->SQL_delete($table, $conditions);
 
       if($response !== false){
-        $this->executeSQL($response);
-
-        return [
-          "SQL" => $response,
-          "RESULT" => $this->sql_exec_result,
-        ];
+        return $this->executeSQL($response);
       } else {
-        return [
-          "SQL" => $response['SQL'],
-          "RESULT" => false,
-        ];
+        return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
       }
     } catch (Exception $e) {
-      return [
-        'query_status'=> false,
-        'message' => $e->getMessage()
-      ];
+      return new ReturnFormat(false, $e->getMessage(), false);
     }
   }
 }
