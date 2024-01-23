@@ -55,7 +55,7 @@ class Connection {
     $this->connection_error = null;
   }
 
-  protected function executeSQL(String $sql, ...$values) {
+  protected function executeSQL(String $sql, ...$values) : Object {
     $this->connect();
 
     if($this->connection){
@@ -77,7 +77,7 @@ class Connection {
         if($sql_comand == 'select'){
           $this->sql_exec_result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
-          $this->sql_exec_result = $stmt;
+          $this->sql_exec_result = $stmt->rowCount();
         }
       } catch (Exception $e) {
         $this->sql_exec_result = false;
