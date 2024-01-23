@@ -79,6 +79,7 @@ class Connection {
         } else {
           $this->sql_exec_result = $stmt->rowCount();
         }
+        $this->sql_exec_result_error = null;
       } catch (Exception $e) {
         $this->sql_exec_result = false;
         $this->sql_exec_result_error = $e->getMessage();
