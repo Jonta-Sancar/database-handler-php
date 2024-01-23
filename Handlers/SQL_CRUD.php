@@ -190,30 +190,38 @@ class SQL_CRUD extends Connection{
   }
 
   public function execUpdate(String $table, Array $data, Array|String|Null $conditions = null) : Object{
-    try{
-      $response = $this->SQL_update($table, $data, $conditions);
-
-      if($response !== false){
-        return $this->executeSQL($response['SQL'], ...$response['VALUES']);
-      } else {
-        return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
+    if(!empty($conditions)){
+      try{
+        $response = $this->SQL_update($table, $data, $conditions);
+  
+        if($response !== false){
+          return $this->executeSQL($response['SQL'], ...$response['VALUES']);
+        } else {
+          return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
+        }
+      } catch (Exception $e) {
+        return new ReturnFormat(false, $e->getMessage(), false);
       }
-    } catch (Exception $e) {
-      return new ReturnFormat(false, $e->getMessage(), false);
+    } else {
+      return new ReturnFormat(false, "The operation was blocked as it would have been applied to all records in the table", false);
     }
   }
 
   public function execDelete(String $table, Array|String|Null $conditions = null) : Object{
-    try{
-      $response = $this->SQL_delete($table, $conditions);
-
-      if($response !== false){
-        return $this->executeSQL($response);
-      } else {
-        return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
+    if(!empty($conditions)){
+      try{
+        $response = $this->SQL_delete($table, $conditions);
+  
+        if($response !== false){
+          return $this->executeSQL($response);
+        } else {
+          return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", $response);
+        }
+      } catch (Exception $e) {
+        return new ReturnFormat(false, $e->getMessage(), false);
       }
-    } catch (Exception $e) {
-      return new ReturnFormat(false, $e->getMessage(), false);
+    } else {
+      return new ReturnFormat(false, "The operation was blocked as it would have been applied to all records in the table", false);
     }
   }
 }
