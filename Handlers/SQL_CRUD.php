@@ -17,7 +17,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  private function checksIfIsArrayAndReturns($data, $implode_separator = ", "){
+  private function checksIfIsArrayAndReturns(Array|String|Int|Float $data, String $implode_separator = ", ") : String|Int|Float {
     if(is_array($data)){
       return implode($implode_separator, $data);
     } else {
@@ -25,13 +25,13 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  private function checksIfIsNotEmptyAndReturns($data, $prefix = ''){
+  private function checksIfIsNotEmptyAndReturns($data, String $prefix = '') : String{
     $new_value = !empty($data) ? $prefix . $data : "";
 
     return $new_value;
   }
 
-  private function returnsValuesSyntax($array){
+  private function returnsValuesSyntax(Array $array) : String|Bool{
     if(is_numeric($array[0])){
       $values = false;
     } else {
@@ -45,7 +45,7 @@ class SQL_CRUD extends Connection{
     return $values;
   }
 
-  private function prepareConditions($conditions){
+  private function prepareConditions(Array|Null $conditions) : String|Array|Bool{
     if(!empty($conditions)){
       if(is_array($conditions)){
         $processed_data = array_map(function($v){
@@ -66,7 +66,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  private function returnsOderBySyntax($order_by, $order_direction){
+  private function returnsOderBySyntax(String|Null $order_by, String $order_direction) : String{
     $desc_array = [">", "DESC"];
   
     if(!empty($order_by)){
@@ -79,7 +79,7 @@ class SQL_CRUD extends Connection{
     return $order_by;
   }
 
-  private function prepareLimitClause($limit_min, $limit_max){
+  private function prepareLimitClause(String|Int|Null $limit_min, String|Int|Null $limit_max) : String{
     if(empty($limit_max) && (!empty($limit_min) && $limit_min != 0)){
       $limit = "LIMIT $limit_min";
     } else if ((!empty($limit_min) || $limit_min === 0) && (!empty($limit_max) || $limit_max === 0)){
@@ -91,7 +91,7 @@ class SQL_CRUD extends Connection{
     return $limit;
   }
   
-  private function SQL_insert($table, $data){
+  private function SQL_insert(String $table, Array $data) : Array|Bool{
     if(is_array($data)){
       $processed_data = array_map(function($v){return $this->returnProcessedData($v);}, $data);
   
@@ -108,7 +108,7 @@ class SQL_CRUD extends Connection{
     }
   }
   
-  private function SQL_select($table, $columns = "*", $conditions = null, $group_by = null, $order_by = null, $order_direction = "<", $limit_min = null, $limit_max = null){
+  private function SQL_select(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = null, String|Int|Null $limit_max = null) : String|Bool{
     try{
       $columns_txt    = $this->checksIfIsArrayAndReturns($columns)  ?? '*';
       $conditions_txt = $this->prepareConditions($conditions);
@@ -130,7 +130,7 @@ class SQL_CRUD extends Connection{
     }    
   }
   
-  private function SQL_update($table, $data, $conditions = false){
+  private function SQL_update(String $table, Array $data, Array|String|Null $conditions = null) : Array|Bool{
     if(is_array($data) && $conditions && !empty($conditions)){
       $processed_data = array_map(function($v){return $this->returnProcessedData($v);}, $data);
       $conditions_txt = $this->prepareConditions($conditions);
@@ -153,7 +153,7 @@ class SQL_CRUD extends Connection{
     }
   }
   
-  private function SQL_delete($table, $conditions = null){
+  private function SQL_delete(String $table, Array|String|Null $conditions = null) : Array|Bool{
     $conditions_prepared = $this->prepareConditions($conditions);
   
     $conditions_txt = $this->checksIfIsNotEmptyAndReturns($conditions_prepared, " WHERE ");
@@ -161,7 +161,7 @@ class SQL_CRUD extends Connection{
     return "DELETE FROM $table $conditions_txt";
   }
 
-  public function execInsert($table, $data){
+  public function execInsert(String $table, Array $data) : Object{
     try{
       $response = $this->SQL_insert($table, $data);
   
@@ -175,7 +175,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  public function execSelect($table, $columns = "*", $conditions = null, $group_by = null, $order_by = null, $order_direction = "<", $limit_min = 100, $limit_max = null){
+  public function execSelect(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = 100, String|Int|Null $limit_max = null) : Object{
     try{
       $response = $this->SQL_select($table, $columns, $conditions, $group_by, $order_by, $order_direction, $limit_min, $limit_max);
 
@@ -189,7 +189,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  public function execUpdate($table, $data, $conditions = null){
+  public function execUpdate(String $table, Array $data, Array|String|Null $conditions = null) : Object{
     try{
       $response = $this->SQL_update($table, $data, $conditions);
 
@@ -203,7 +203,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  public function execDelete($table, $conditions = null){
+  public function execDelete(String $table, Array|String|Null $conditions = null) : Object{
     try{
       $response = $this->SQL_delete($table, $conditions);
 
