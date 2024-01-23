@@ -55,7 +55,7 @@ class Connection {
     $this->connection_error = null;
   }
 
-  protected function executeSQL(String $sql, ...$values) : Object {
+  public function executeSQL(String $sql, ...$values) : Object {
     $this->connect();
 
     if($this->connection){
