@@ -17,7 +17,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  private function checksIfIsArrayAndReturns(Array|String|Int|Float $data, String $implode_separator = ", ") : String|Int|Float {
+  private function checksIfIsArrayAndReturns(Array|String|Int|Float|Null $data, String $implode_separator = ", ") : String|Int|Float|Null {
     if(is_array($data)){
       return implode($implode_separator, $data);
     } else {
@@ -153,7 +153,7 @@ class SQL_CRUD extends Connection{
     }
   }
   
-  private function SQL_delete(String $table, Array|String|Null $conditions = null) : Array|Bool{
+  private function SQL_delete(String $table, Array|String|Null $conditions = null) : String|Bool{
     $conditions_prepared = $this->prepareConditions($conditions);
   
     $conditions_txt = $this->checksIfIsNotEmptyAndReturns($conditions_prepared, " WHERE ");
