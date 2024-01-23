@@ -4,6 +4,18 @@ namespace Handlers;
 
 use Exception;
 
+class ReturnFormat {
+  public Object|Array|Bool|Null $result;
+  public String|Null $result_error;
+  public String|Null $sql;
+
+  function __construct(Object|Array|Bool|Null $result, String|Null $result_error, String|Null $sql) {
+    $this->result = $result;
+    $this->result_error = $result_error;
+    $this->sql = $sql;
+  }
+}
+
 class Connection {
   public $connection = null;
   public $connection_error = null;
@@ -11,13 +23,13 @@ class Connection {
   public $sql_exec_result = null;
   public $sql_exec_result_error = null;
 
-  protected $db_host  = null;
-  protected $db_user  = null;
-  protected $db_pass  = null;
-  protected $db_name  = null;
-  protected $db_drive = null;
+  protected String $db_host;
+  protected String $db_user;
+  protected String $db_pass;
+  protected String $db_name;
+  protected String $db_drive;
 
-  public function __construct($host = null, $db_user = null, $db_pass = null, $db_name = null, $db_drive = 'mysql') {
+  public function __construct(String $host = null, String $db_user = null, String $db_pass = null, String $db_name = null, String $db_drive = 'mysql') {
     $this->db_host = $host;
     $this->db_user = $db_user;
     $this->db_pass = $db_pass;
@@ -43,7 +55,7 @@ class Connection {
     $this->connection_error = null;
   }
 
-  protected function executeSQL($sql, ...$values) {
+  protected function executeSQL(String $sql, ...$values) {
     $this->connect();
 
     if($this->connection){
@@ -78,6 +90,6 @@ class Connection {
 
     $this->closeConnection();
 
-    return $this->sql_exec_result;
+    return new ReturnFormat($this->sql_exec_result, $this->sql_exec_result_error, $sql);
   }
 }
