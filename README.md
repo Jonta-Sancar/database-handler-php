@@ -100,11 +100,11 @@ A set of files that deliver database manipulation functionality
     var_dump($response);
     
     echo "<br><br>";
-
+   
     $tables = [
-      " people P ",
-      " type_has_people THP ON THP.id_person=P.id ",
-      " type_people TP ON TP.id=THP.id_type "
+      " people P " => [],
+      " type_has_people THP " => [["THP.id_person", "P.id"]],
+      " type_people TP " => [["TP.id", "THP.id_type"]]
     ];
 
     $columns = [
