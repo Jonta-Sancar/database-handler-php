@@ -18,6 +18,7 @@ class SQL_CRUD extends Connection{
   }
 
   private function checksIfIsArrayAndReturns(Array|String|Int|Float|Null $data, String $implode_separator = ", ") : String|Int|Float|Null {
+    echo "<br>";
     if(is_array($data)){
       return implode($implode_separator, $data);
     } else {
@@ -66,7 +67,7 @@ class SQL_CRUD extends Connection{
     }
   }
 
-  private function returnsOderBySyntax(String|Null $order_by, String $order_direction) : String{
+  private function returnsOderBySyntax(String|Null $order_by, String|Null $order_direction) : String{
     $desc_array = [">", "DESC"];
   
     if(!empty($order_by)){
@@ -90,6 +91,30 @@ class SQL_CRUD extends Connection{
 
     return $limit;
   }
+
+  private function prepareTable($table){
+    if(is_array($table)){
+      $new_table_value = [];
+
+      foreach($table as $key => $values){
+        if(is_array($values)){
+          $on_txt = $this->prepareConditions($values);
+  
+          if($on_txt && !empty($on_txt)){
+            array_push($new_table_value, $key . ' ON ' . $on_txt);
+          } else {
+            array_push($new_table_value, $key);
+          }
+        } else {
+            array_push($new_table_value, $values);
+        }
+      }
+    } else {
+      $new_table_value = $table;
+    }
+
+    return $new_table_value;
+  }
   
   protected function SQL_insert(String $table, Array $data) : Array|Bool{
     if(is_array($data)){
@@ -108,7 +133,7 @@ class SQL_CRUD extends Connection{
     }
   }
   
-  protected function SQL_select(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = null, String|Int|Null $limit_max = null) : String|Bool{
+  public function SQL_select(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = null, String|Int|Null $limit_max = null) : String|Bool{
     try{
       $columns_txt    = $this->checksIfIsArrayAndReturns($columns)  ?? '*';
       $conditions_txt = $this->prepareConditions($conditions);
@@ -122,7 +147,9 @@ class SQL_CRUD extends Connection{
 
       $limit          = $this->prepareLimitClause($limit_min, $limit_max);
 
-      $table_txt      = $this->checksIfIsArrayAndReturns($table, " INNER JOIN ");
+      $table_prepared = $this->prepareTable($table);
+
+      $table_txt      = $this->checksIfIsArrayAndReturns($table_prepared, " INNER JOIN ");
   
       return "SELECT $columns_txt FROM $table_txt $conditions_txt $group_by_txt $order_by_txt $limit;";
     } catch (Exception $e){
