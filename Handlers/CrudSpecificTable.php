@@ -63,4 +63,26 @@ class CrudSpecificTable extends SQL_CRUD{
   public function returnsColumnsForListing(){
     return $this->columns_for_listing;
   }
+
+  public function returnsIdByRef($ref)
+  {
+    $conditions = [
+      ["ref_db_handler", $ref]
+    ];
+
+    $response = $this->execSelect($this->table, 'id', $conditions);
+
+    return $response->result != false ? $response->result[0]['id'] : false;
+  }
+
+  public function returnsRefById($id)
+  {
+    $conditions = [
+      ["id", $id]
+    ];
+
+    $response = $this->execSelect($this->table, 'ref_db_handler', $conditions);
+
+    return $response->result != false ? $response->result[0]['ref_db_handler'] : false;
+  }
 }
