@@ -127,6 +127,14 @@ class Connection
 
     $ref_log = $this->checkSqlResultAndReturnsRefLog($sql);
 
+    if($ref_log !== null){
+      if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+      }
+
+      $_SESSION['db_handler_ref_log'] = $ref_log;
+    }
+
     $this->closeConnection();
 
     return new ReturnFormat($sql_exec_result, $sql_exec_result_error, $ref_log, $sql);
@@ -255,7 +263,7 @@ class Connection
       return $v['COLUMN_NAME'];
     }, $response);
 
-    if(array_search("ref", $columns) !== false){
+    if(array_search("ref_db_handler", $columns) !== false){
       $characters = str_split("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
       $ref_format = str_split('#####-####-#####-########');
   
