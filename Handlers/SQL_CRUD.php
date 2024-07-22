@@ -84,7 +84,7 @@ class SQL_CRUD extends Connection{
     try{
       $ref = $this->returnsItemRef($table);
       if($ref !== false){
-        $data['ref'] = $ref;
+        $data['ref_db_handler'] = $ref;
       }
 
       $response = $this->SQL_insert($table, $data);
