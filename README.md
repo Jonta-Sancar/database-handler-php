@@ -72,6 +72,12 @@ $ composer require jonta-sancar/database-handler-php
     echo "<br>";
     var_dump($result);
     echo "<br>";
+
+      // $result = $PDO->executeSQL("DELETE FROM people WHERE `id` = ?", ...[1]);
+    $result = $PDO->executeSQL("DELETE FROM people WHERE `id` = ?", 1);
+    echo "<br>";
+    var_dump($result);
+    echo "<br>";
 ```
 
 ## Connection whith SQL functionality
