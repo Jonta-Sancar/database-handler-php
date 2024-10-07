@@ -1,4 +1,4 @@
-# database-handler-php
+# database-handler-php - version: 1.4
 A set of files that deliver database manipulation functionality
 
 ## Database
