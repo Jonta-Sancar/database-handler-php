@@ -3,7 +3,6 @@
 namespace Handlers;
 
 class AuxiliariesToCRUD {
-
   public static function returnProcessedData($v){
     if(empty($v) && is_string($v) && $v != 0){
       return null;
