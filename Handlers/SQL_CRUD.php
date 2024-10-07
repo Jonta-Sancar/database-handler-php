@@ -3,6 +3,7 @@ namespace Handlers;
 
 use Handlers\ReturnFormat;
 use Handlers\Connection;
+use Handlers\AuxiliariesToCRUD;
 
 use Exception;
 
