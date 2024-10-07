@@ -35,7 +35,7 @@ class Connection
   protected String $db_name;
   protected String $db_drive;
 
-  public function __construct(String $host = null, String $db_user = null, String $db_pass = null, String $db_name = null, String $db_drive = 'mysql')
+  public function __construct(String $host, String $db_user, String $db_pass, String $db_name, String $db_drive = 'mysql')
   {
     $this->db_host  = $host;
     $this->db_user  = $db_user;
@@ -183,7 +183,7 @@ class Connection
     if ($this->sql_exec_result === false) {
       $this->checkLogTable();
       
-      $SQL = "INSERT INTO logs_db_handler (ref, erro, auxiliar) VALUES (?,?,?)";
+      $SQL = "INSERT INTO logs_db_handler (ref_db_handler, erro, auxiliar) VALUES (?,?,?)";
       $stmt = $this->connection->prepare($SQL);
 
       $error = !empty($this->sql_exec_result_error) ? $this->sql_exec_result_error : "undefined";
@@ -220,7 +220,7 @@ class Connection
     if(count($result) <= 0){
       $SQL = "CREATE TABLE logs_db_handler (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
-        ref VARCHAR(25) NOT NULL,
+        ref_db_handler VARCHAR(25) NOT NULL,
         erro TEXT NULL,
         auxiliar TEXT NULL
         )";
@@ -235,9 +235,9 @@ class Connection
    * Returns a unique reference for the given table.
    *
    * @param string $table The name of the table.
-   * @return string|false The unique reference or false if the table does not have a 'ref' column.
+   * @return string|false The unique reference or false if the table does not have a 'ref_db_handler' column.
    */
-  public function returnsItemRef($table){
+  protected function returnsItemRef($table){
     $SQL = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
     $this->connect();
     $stmt = $this->connection->prepare($SQL);
@@ -289,7 +289,7 @@ class Connection
    * @return bool Returns true if the reference can be used, false otherwise.
    */
   private function checkIfRefCanBeUsed($table, $ref){
-    $SQL = "SELECT * FROM $table WHERE ref = ?";
+    $SQL = "SELECT * FROM $table WHERE ref_db_handler = ?";
     $stmt = $this->connection->prepare($SQL);
     $stmt->bindParam(1, $ref);
     $stmt->execute();
