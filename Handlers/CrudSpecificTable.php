@@ -5,18 +5,20 @@ use Handlers\SQL_CRUD;
 
 class CrudSpecificTable extends SQL_CRUD{
   protected String $table;
-  protected Array $columns = [];
+  protected Array $columns = []; // this propertie can be a method, using SQL
   protected Array $columns_for_registration = [];
   protected Array $columns_for_editing = [];
   protected Array $columns_for_listing = [];
+  protected Array $required_columns = [];
 
-  public function __construct(String $table, Array $columns, String $db_host = null, String $db_user = null, String $db_pass = null, String $db_name = null, String $db_drive = 'mysql') {
+  public function __construct(String $table, Array $columns, String $db_host, String $db_user, String $db_pass, String $db_name, String $db_drive = 'mysql') {
     $this->table = $table;
 
     parent::__construct($db_host, $db_user, $db_pass, $db_name, $db_drive);
 
     foreach ($columns as $column => $properties) {
-      array_push($this->columns, $column);
+      $column_title = !empty($properties['title']) ? $properties['title'] : $column;
+      $this->columns[$column] = $column_title;
 
       if(array_search("registration", $properties) !== false) {
         array_push($this->columns_for_registration, $column);
@@ -29,27 +31,37 @@ class CrudSpecificTable extends SQL_CRUD{
       if(array_search("listing", $properties) !== false){
         array_push($this->columns_for_listing, $column);
       }
+      
+      if(array_search("required", $properties) !== false){
+        array_push($this->required_columns, $column);
+      }
     }
   }
 
-  public function tableInsert(Array $data) : Object{
-    return $this->execInsert($this->table, $data);
+  public function insert(Array $data) : Object{
+    return parent::execInsert($this->table, $data);
   }
 
-  public function tableSelect(String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = 100, String|Int|Null $limit_max = null) : Object{
-    return $this->execSelect($this->table, $columns, $conditions, $group_by, $order_by, $order_direction, $limit_min, $limit_max);
+  public function select(String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = 100, String|Int|Null $limit_max = null) : Object{
+    return parent::execSelect($this->table, $columns, $conditions, $group_by, $order_by, $order_direction, $limit_min, $limit_max);
   }
 
-  public function tableUpdate(Array $data, Array|String|Null $conditions = null) : Object{
-    return $this->execUpdate($this->table, $data, $conditions);
+  public function update(Array $data, Array|String|Null $conditions = null) : Object{
+    return parent::execUpdate($this->table, $data, $conditions);
   }
 
-  public function tableDelete(Array|String|Null $conditions = null) : Object{
-    return $this->execDelete($this->table, $conditions);
+  public function delete(Array|String|Null $conditions = null) : Object{
+    return parent::execDelete($this->table, $conditions);
   }
 
-  public function returnsAllColumnsOfTable(){
-    return $this->columns;
+  public function returnsAllColumnsOfTable(Bool $title = false){
+    if($title){
+      $columns = array_values($this->columns);
+    } else {
+      $columns = array_keys($this->columns);
+    }
+
+    return $columns;
   }
 
   public function returnsColumnsForRegistration(){
@@ -64,7 +76,28 @@ class CrudSpecificTable extends SQL_CRUD{
     return $this->columns_for_listing;
   }
 
-  public function returnsIdByRef($ref)
+  public function returnsRequiredColumns(){
+    return $this->required_columns;
+  }
+
+  public function returnsTitleOfColumn(String $column){
+    return $this->columns[$column];
+  }
+
+  public function returnsColumnOfTitle(String $title){
+    $column = false;
+
+    foreach ($this->columns as $key => $value) {
+      if($value == $title){
+        $column = $key;
+        break;
+      }
+    }
+
+    return $column;
+  }
+
+  public function returnsIdByRef(String $ref)
   {
     $conditions = [
       ["ref_db_handler", $ref]
@@ -75,7 +108,7 @@ class CrudSpecificTable extends SQL_CRUD{
     return $response->result != false ? $response->result[0]['id'] : false;
   }
 
-  public function returnsRefById($id)
+  public function returnsRefById(String|Int $id)
   {
     $conditions = [
       ["id", $id]

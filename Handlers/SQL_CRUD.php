@@ -82,15 +82,15 @@ class SQL_CRUD extends Connection{
 
   public function execInsert(String $table, Array $data) : Object{
     try{
-      $ref = $this->returnsItemRef($table);
+      $ref = self::returnsItemRef($table);
       if($ref !== false){
         $data['ref_db_handler'] = $ref;
       }
 
-      $response = $this->SQL_insert($table, $data);
+      $response = self::SQL_insert($table, $data);
   
       if($response !== false){
-        return $this->executeSQL($response['SQL'], ...$response["VALUES"]);
+        return self::executeSQL($response['SQL'], ...$response["VALUES"]);
       } else {
         return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", null, $response);
       }
@@ -101,10 +101,10 @@ class SQL_CRUD extends Connection{
 
   public function execSelect(String|Array $table, String|Array|Null $columns = "*", Array|Null $conditions = null, Array|String|Null $group_by = null, Array|String|Null $order_by = null, String|Null $order_direction = "<", String|Int|Null $limit_min = 100, String|Int|Null $limit_max = null) : Object{
     try{
-      $response = $this->SQL_select($table, $columns, $conditions, $group_by, $order_by, $order_direction, $limit_min, $limit_max);
+      $response = self::SQL_select($table, $columns, $conditions, $group_by, $order_by, $order_direction, $limit_min, $limit_max);
 
       if($response !== false){
-        return $this->executeSQL($response);
+        return self::executeSQL($response);
       } else {
         return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", null, $response);
       }
@@ -116,10 +116,10 @@ class SQL_CRUD extends Connection{
   public function execUpdate(String $table, Array $data, Array|String|Null $conditions = null) : Object{
     if(!empty($conditions)){
       try{
-        $response = $this->SQL_update($table, $data, $conditions);
+        $response = self::SQL_update($table, $data, $conditions);
   
         if($response !== false){
-          return $this->executeSQL($response['SQL'], ...$response['VALUES']);
+          return self::executeSQL($response['SQL'], ...$response['VALUES']);
         } else {
           return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", null, $response);
         }
@@ -134,10 +134,10 @@ class SQL_CRUD extends Connection{
   public function execDelete(String $table, Array|String|Null $conditions = null) : Object{
     if(!empty($conditions)){
       try{
-        $response = $this->SQL_delete($table, $conditions);
+        $response = self::SQL_delete($table, $conditions);
   
         if($response !== false){
-          return $this->executeSQL($response);
+          return self::executeSQL($response);
         } else {
           return new ReturnFormat(false, "SQL could not be mounted. Please check the data provided and try again", null, $response);
         }
