@@ -1,5 +1,6 @@
 {
     "name": "jonta-sancar/database-handler-php",
+    "version": "1.4.0",
     "autoload": {
         "psr-4": {
             "Handlers\\": "Handlers/"
