@@ -1,6 +1,6 @@
 {
     "name": "jonta-sancar/database-handler-php",
-    "version": "1.4.0",
+    "version": "1.4.3",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -15,5 +15,6 @@
     ],
     "require": {
         "php": ">=7.4.0"
-    }
+    },
+    "minimum-stability": "stable"
 }
