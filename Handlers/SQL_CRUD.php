@@ -7,7 +7,6 @@ use Handlers\Connection;
 use Exception;
 
 class SQL_CRUD extends Connection{
-  
   protected function SQL_insert(String $table, Array $data) : Array|Bool{
     if(is_array($data)){
       $processed_data = array_map(function($v){return AuxiliariesToCRUD::returnProcessedData($v);}, $data);
