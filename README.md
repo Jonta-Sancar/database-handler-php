@@ -60,6 +60,13 @@ A set of files that deliver database manipulation functionality
     use Handlers\Connection;
 
     $PDO = new Connection(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    # execute_sql.php
+      // $result = $PDO->executeSQL("INSERT INTO people (`id`, `name`) VALUES (?, ?)", ...[1, 'Zerrai Mundo']);
+    $result = $PDO->executeSQL("INSERT INTO people (`id`, `name`) VALUES (?, ?)", 1, 'Zerrai Mundo');
+    echo "<br>";
+    var_dump($result);
+    echo "<br>";
 ```
 
 ## Connection whith SQL functionality
