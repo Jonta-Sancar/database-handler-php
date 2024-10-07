@@ -43,6 +43,11 @@ A set of files that deliver database manipulation functionality
   (3,3);
 ```
 
+## import
+```
+$ composer require jonta-sancar/database-handler-php
+```
+
 ## Test Values
 ```php
   <?php
