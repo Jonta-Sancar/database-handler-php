@@ -23,8 +23,6 @@ class ReturnFormat
 
 class Connection
 {
-  public $logged_user = null;
-
   public $connection = null;
   public $connection_error = null;
 
@@ -44,16 +42,6 @@ class Connection
     $this->db_pass  = $db_pass;
     $this->db_name  = $db_name;
     $this->db_drive = $db_drive;
-  }
-
-  /**
-   * Sets the logged in user.
-   *
-   * @param mixed $user The user to be set as the logged user.
-   * @return void
-   */
-  public function setUser($user){
-    $this->logged_user = $user;
   }
 
   /**
@@ -201,7 +189,7 @@ class Connection
       $error = !empty($this->sql_exec_result_error) ? $this->sql_exec_result_error : "undefined";
       
       $ref = $this->returnsItemRef("logs_db_handler");
-      $values_log = [$ref, $error, $sql . "||| user - " . $this->logged_user];
+      $values_log = [$ref, $error, $sql];
       foreach ($values_log as $k => $v) {
         $stmt->bindParam($k+1, $values_log[$k]);
       }
