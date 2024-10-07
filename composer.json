@@ -1,0 +1,15 @@
+{
+    "name": "jonta-sancar/database-handler-php",
+    "autoload": {
+        "psr-4": {
+            "Handlers\\": "Handlers/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jonta Sancar",
+            "email": "jontasancar@gmail.com"
+        }
+    ],
+    "require": {}
+}
