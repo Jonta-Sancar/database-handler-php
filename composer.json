@@ -12,5 +12,9 @@
             "email": "jontasancar@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=7.4.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
