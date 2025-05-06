@@ -1,6 +1,21 @@
 # database-handler-php - version: 1.8.0
 A set of files that deliver database manipulation functionality
 
+## import
+```
+composer require jonta-sancar/database-handler-php
+```
+
+## Test Values
+```php
+  <?php
+    # connect_values.php
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+    define('DB_NAME', 'test_db_handler');
+```
+
 ## Database
 ```SQL
   CREATE DATABASE IF NOT EXISTS `test_db_handler` COLLATE utf8mb3_general_ci;
@@ -30,21 +45,6 @@ A set of files that deliver database manipulation functionality
     CONSTRAINT `type_has_people_ibfk_1` FOREIGN KEY (`id_type`) REFERENCES `type_people` (`id`),
     CONSTRAINT `type_has_people_ibfk_2` FOREIGN KEY (`id_person`) REFERENCES `people` (`id`)
   );
-```
-
-## import
-```
-composer require jonta-sancar/database-handler-php
-```
-
-## Test Values
-```php
-  <?php
-    # connect_values.php
-    define('DB_HOST', 'localhost');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
-    define('DB_NAME', 'test_db_handler');
 ```
 
 # Connection
